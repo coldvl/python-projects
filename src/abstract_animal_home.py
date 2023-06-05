@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class AbstractAnimalHome:
+class AbstractAnimalHome(ABC):
     """
     An abstract base class for animal homes.
     """
@@ -16,6 +16,9 @@ class AbstractAnimalHome:
         self.name = name
         self.location = location
         self.area = area
+
+    def get_attributes_by_type(self, data_type):
+        return {k: v for k, v in self.__dict__.items() if isinstance(v, data_type)}
 
     @abstractmethod
     def calculate_cost_per_month(self):
