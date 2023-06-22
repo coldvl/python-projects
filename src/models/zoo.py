@@ -1,9 +1,14 @@
+import sys
+sys.path.append("src/")
+import logging
 from datetime import time
 from abstract_animal_home import AbstractAnimalHome
 
-
-
 class Zoo(AbstractAnimalHome):
+    """
+    A class representing a zoo.
+    """
+
     def __init__(self, name, location, area, capacity, opening_time, closing_time, cost_per_day):
         super().__init__(name, location, area)
         self.capacity = capacity
@@ -11,7 +16,17 @@ class Zoo(AbstractAnimalHome):
         self.closing_time = closing_time
         self.cost_per_day = cost_per_day
 
-    def increase_capacity(self, count):
+    
+    @logged(NonIntegerCountException, mode="console")
+
+    def add_animals(self, count):
+        """
+        Adds animals to the zoo.
+
+        :param count: The number of animals to add.
+        """
+        if not isinstance(count, int):
+            raise NonIntegerCountException("Count must be an integer")
         self.capacity += count
 
     def split_area(self):
@@ -26,8 +41,19 @@ class Zoo(AbstractAnimalHome):
 
     def calculate_cost_per_month(self):
         return self.cost_per_day * 30
-
-
-zoo = Zoo("Limpopo", "Lviv", 100, 20, time(10, 0, 0), time(18, 0, 0), 30)
-print(zoo)
-print("Cost Per Month:", zoo.calculate_cost_per_month())
+    
+if __name__ == "__main__":
+    zoo = Zoo("Zoo", "Location", 100, 100, time(8), time(18), 10)
+    print(zoo)
+    zoo.add_animals(10)
+    print("added animals")
+    print(zoo)
+    zoo.split_area()
+    print("split area")
+    print(zoo)
+    zoo.add_new_region(100)
+    print("added new region")
+    print(zoo)
+    zoo.add_animals(10.5)
+    print("added animals with exception")
+    print(zoo)

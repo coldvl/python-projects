@@ -111,6 +111,10 @@ if __name__ == "__main__":
     manager.print_all_sanctuaries()
 
     print()
+    
+    
+
+    print()
 
     print("The cheapest animal home is:", manager.find_cheapest_animal_home())
 
