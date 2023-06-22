@@ -6,10 +6,6 @@ from models.zoo import Zoo
 from abstract_animal_home import AbstractAnimalHome
 
 class AnimalHomeManager:
-    """
-    A class for managing a collection of animal homes.
-    """
-
     def __init__(self):
         """
         Initializes a new instance of the AnimalHomeManager class.
@@ -40,27 +36,7 @@ class AnimalHomeManager:
 
         :return: A list of tuples containing the animal homes and the result of calling the do_something method for each animal home.
         """
-        animal_homes = self.animal_homes
-        results = self.do_something_for_all_animal_homes()
-        return list(zip(animal_homes, results))
-    
-    def check_conditions(self, condition):
-        """
-        Checks whether all objects in the animal_home_manager list satisfy a certain condition, and if at least one does.
-        Returns a dictionary with the keys "all" and "any" and the corresponding boolean values.
-
-        :param condition: The condition to check.
-        :return: A dictionary with the keys "all" and "any" and the corresponding boolean values.
-        """
-        all_satisfy = all(condition(animal_home) for animal_home in self.animal_homes)
-        any_satisfy = any(condition(animal_home) for animal_home in self.animal_homes)
-        return {"all": all_satisfy, "any": any_satisfy}
-
-    def get_attributes_by_type(self, type_name):
-        attributes = []
-        for animal_home in self.animal_homes:
-            attributes.append(animal_home.get_attributes_by_type(type_name))
-        return attributes
+        self.animal_homes = []
 
     def add_animal_home(self, animal_home):
         """
@@ -70,41 +46,33 @@ class AnimalHomeManager:
         """
         self.animal_homes.append(animal_home)
 
-    def find_cheapest_animal_home(self):
-        """
-        Finds the animal home with the lowest cost per month.
+    def get_attributes_by_type(self, type_name):
+        attributes = []
+        for animal_home in self.animal_homes:
+            attributes.append(animal_home.get_attributes_by_type(type_name))
+        return attributes
 
-        :return: The animal home with the lowest cost per month.
-        """
+    def add_animal_home(self, animal_home):
+        self.animal_homes.append(animal_home)
+
+    def find_cheapest_animal_home(self):
         return min(self.animal_homes, key=lambda animal_home: animal_home.calculate_cost_per_month())
 
     def find_animal_homes_with_area_less_than(self, area):
-        """
-        Finds all animal homes with an area less than the specified value.
-
-        :param area: The maximum area of the animal homes to find.
-        :return: A list of animal homes with an area less than the specified value.
-        """
         return [animal_home for animal_home in self.animal_homes if animal_home.area < area]
 
     def print_all_farms(self):
-        """
-        Prints all farms in the collection.
-        """
         print("Farms:")
         for animal_home in self.animal_homes:
             if isinstance(animal_home, Farm):
                 print(animal_home)
 
     def print_all_zoos(self):
-        """
-        Prints all zoos in the collection.
-        """
         print("Zoos:")
         for animal_home in self.animal_homes:
             if isinstance(animal_home, Zoo):
                 print(animal_home)
-    
+
     def print_all_aquariums(self):
         print("Aquariums:")
         for animal_home in self.animal_homes:
@@ -155,20 +123,3 @@ if __name__ == "__main__":
     print("Animal homes with the area less than 200:")
     for animal_home in manager.find_animal_homes_with_area_less_than(200):
         print(animal_home)
-
-
-    print()
-    
-    """
-    print the result of executing these methods:
-    do_something_for_all_animal_homes
-    zip_animal_homes
-    check_conditions
-    get_attributes_by_type
-    """
-    print(manager.do_something_for_all_animal_homes())
-    print(manager.zip_animal_homes())
-    print(manager.check_conditions(lambda animal_home: animal_home.area > 100))
-    print(manager.get_attributes_by_type(Farm))
-    
-    
