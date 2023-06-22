@@ -1,5 +1,29 @@
+import sys
+sys.path.append("src/")
+import logging
 from datetime import time
 from abstract_animal_home import AbstractAnimalHome
+
+class NonIntegerCountException(Exception):
+    """
+    An exception raised when a non-integer count is passed to the add_animals method.
+    """
+
+def logged(exception, mode):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except exception as e:
+                if mode == "console":
+                    logging.error(str(e))
+                elif mode == "file":
+                    logging.basicConfig(filename='exceptions.log', level=logging.ERROR)
+                    logging.error(str(e))
+                else:
+                    raise ValueError("Invalid mode specified for logged decorator")
+        return wrapper
+    return decorator
 
 class Zoo(AbstractAnimalHome):
     """
@@ -24,12 +48,17 @@ class Zoo(AbstractAnimalHome):
         self.closing_time = closing_time
         self.cost_per_day = cost_per_day
 
+    
+    @logged(NonIntegerCountException, mode="console")
+
     def add_animals(self, count):
         """
         Adds animals to the zoo.
 
         :param count: The number of animals to add.
         """
+        if not isinstance(count, int):
+            raise NonIntegerCountException("Count must be an integer")
         self.capacity += count
 
     def split_area(self):
@@ -62,3 +91,19 @@ class Zoo(AbstractAnimalHome):
         :return: The cost per month of the zoo.
         """
         return self.cost_per_day * 30
+    
+if __name__ == "__main__":
+    zoo = Zoo("Zoo", "Location", 100, 100, time(8), time(18), 10)
+    print(zoo)
+    zoo.add_animals(10)
+    print("added animals")
+    print(zoo)
+    zoo.split_area()
+    print("split area")
+    print(zoo)
+    zoo.add_new_region(100)
+    print("added new region")
+    print(zoo)
+    zoo.add_animals(10.5)
+    print("added animals with exception")
+    print(zoo)
